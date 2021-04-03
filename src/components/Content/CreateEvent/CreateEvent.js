@@ -75,7 +75,7 @@ class CreateEvent extends Component {
                                     onChange= {this.handleChange}
                                     name="patientName"
                                     label="Patient's Name"
-                                    placeholder="Placeholder"
+                                    placeholder="Patient's Name"
                                     fullWidth
                                     margin="normal"
                                     InputLabelProps={{

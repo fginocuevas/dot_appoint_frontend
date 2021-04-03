@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Grid, TextField, FormControl, InputLabel, Select, withStyles, Button, Icon } from '@material-ui/core';
 import axios from 'axios';
+import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
 
 const useStyles = (theme) => ({
     button: {
@@ -22,7 +23,8 @@ class ViewEvent extends Component {
             endTime: null,
             assignedDoctorId: 0,
             schedulerId: 1,
-            doctorList: []
+            doctorList: [],
+            pageErrors: {}
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -64,105 +66,105 @@ class ViewEvent extends Component {
                 <Grid container>
                     <h3>Create Event</h3>
                 </Grid>
+                <ErrorBanner pageErrors={this.state.pageErrors}/>
                 <form onSubmit={this.submitForm}>
-                <Grid container>
-                    
-                        <Grid item container>
-                            <TextField
-                                onChange= {this.handleChange}
-                                name="patientName"
-                                label="Patient's Name"
-                                placeholder="Placeholder"
-                                fullWidth
-                                margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                variant="outlined"
-                            />
-                        </Grid>
+                    <Grid container>
+                            <Grid item container>
+                                <TextField
+                                    onChange= {this.handleChange}
+                                    name="patientName"
+                                    label="Patient's Name"
+                                    placeholder="Placeholder"
+                                    fullWidth
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    variant="outlined"
+                                />
+                            </Grid>
 
-                        {/**
-                         *   Time Slot 
-                         */}
-                        <Grid item container spacing={3}>
-                            <Grid item xs={4}>
-                                <TextField
-                                    onChange= {this.handleChange}
-                                    name="eventDate"
-                                    label="Date"
-                                    type="date"
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="outlined"
-                                />
+                            {/**
+                             *   Time Slot 
+                             */}
+                            <Grid item container spacing={3}>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        onChange= {this.handleChange}
+                                        name="eventDate"
+                                        label="Date"
+                                        type="date"
+                                        fullWidth
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        onChange= {this.handleChange}
+                                        name="startTime"
+                                        label="Start Time"
+                                        type="time"
+                                        fullWidth
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        onChange= {this.handleChange}
+                                        name="endTime"
+                                        label="End Time"
+                                        type="time"
+                                        fullWidth
+                                        margin="normal"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    onChange= {this.handleChange}
-                                    name="startTime"
-                                    label="Start Time"
-                                    type="time"
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="outlined"
-                                />
+                            <Grid item container>
+                                <FormControl variant="outlined" fullWidth>
+                                    <InputLabel htmlFor="outlined-age-native-simple">Doctor's Name</InputLabel>
+                                    <Select
+                                        native
+                                        value={this.state.assignedDoctorId}
+                                        onChange={this.handleChange}
+                                        label="Doctor's Name"
+                                        inputProps={{
+                                            name: 'assignedDoctorId',
+                                            id: 'outlined-age-native-simple',
+                                        }}>
+                                            <option aria-label="None" value="" />
+                                            {this.state.doctorList.map(doctorData => (
+                                                <option 
+                                                    key={doctorData.id} 
+                                                    value={doctorData.id}>
+                                                        {doctorData.id} - {doctorData.lastname}, {doctorData.firstname}
+                                                </option>
+                                            ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    onChange= {this.handleChange}
-                                    name="endTime"
-                                    label="End Time"
-                                    type="time"
-                                    fullWidth
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="outlined"
-                                />
+                            <Grid container>
+                                <Button fullWidth
+                                    type="submit"
+                                    size="large"
+                                    variant="contained"
+                                    color="secondary"
+                                    className={classes.button}
+                                    endIcon={<Icon>submit</Icon>}
+                                >Submit</Button>
                             </Grid>
-                        </Grid>
-                        <Grid item container>
-                            <FormControl variant="outlined" fullWidth>
-                                <InputLabel htmlFor="outlined-age-native-simple">Doctor's Name</InputLabel>
-                                <Select
-                                    native
-                                    value={this.state.assignedDoctorId}
-                                    onChange={this.handleChange}
-                                    label="Doctor's Name"
-                                    inputProps={{
-                                        name: 'assignedDoctorId',
-                                        id: 'outlined-age-native-simple',
-                                    }}>
-                                        <option aria-label="None" value="" />
-                                        {this.state.doctorList.map(doctorData => (
-                                            <option 
-                                                key={doctorData.id} 
-                                                value={doctorData.id}>
-                                                    {doctorData.id} - {doctorData.lastname}, {doctorData.firstname}
-                                            </option>
-                                        ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid container>
-                            <Button fullWidth
-                                type="submit"
-                                size="large"
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}
-                                endIcon={<Icon>submit</Icon>}
-                            >Submit</Button>
-                        </Grid>
-                </Grid>
+                    </Grid>
                 </form>
             </Container>
         )

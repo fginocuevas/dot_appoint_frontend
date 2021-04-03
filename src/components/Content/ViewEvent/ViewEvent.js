@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Grid, TextField, withStyles, Button, Icon } from '@material-ui/core';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
 
 const useStyles = (theme) => ({
     button: {
@@ -16,7 +17,8 @@ class ViewEvent extends Component {
     constructor () {
         super();
         this.state = {
-            event: {}
+            event: {},
+            pageErrors: {}
         };
     }
 
@@ -39,6 +41,7 @@ class ViewEvent extends Component {
                 <Grid container>
                     <h3>View Event</h3>
                 </Grid>
+                <ErrorBanner pageErrors={this.state.pageErrors}/>
                 <Grid container>
                         <Grid item container>
                             <TextField

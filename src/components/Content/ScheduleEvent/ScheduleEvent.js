@@ -1,11 +1,11 @@
 import { Container, Grid, TextField, Box, Button, Icon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
 import EventsTable from './EventsTable/EventsTable';
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { withRouter, NavLink } from 'react-router-dom';
+import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
 
 const useStyles = (theme) => ({
     root: {
@@ -25,8 +25,7 @@ const useStyles = (theme) => ({
     },
   });
 
-  const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByDateRange';
-
+const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByDateRange';
 
 class ScheduleEvent extends Component {
 
@@ -35,7 +34,8 @@ class ScheduleEvent extends Component {
         this.state = {
             searchData: null,
             startDateSelected: moment(new Date()).format("YYYY-MM-DD"),
-            endDateSelected: moment(new Date()).format("YYYY-MM-DD")
+            endDateSelected: moment(new Date()).format("YYYY-MM-DD"),
+            pageErrors: {}
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -71,13 +71,7 @@ class ScheduleEvent extends Component {
                 <Grid container>
                     <h3>Schedule Event</h3>
                 </Grid>
-                <Grid item container>
-                    <div className={classes.root}>
-                        <Alert severity="success" color="info">
-                            This is a success alert — check it out!
-                        </Alert>
-                    </div>
-                </Grid>
+                <ErrorBanner pageErrors={this.state.pageErrors}/>
                 <Box mt={0.5}>
                     <Grid container>
                             <Grid item xs={8} >

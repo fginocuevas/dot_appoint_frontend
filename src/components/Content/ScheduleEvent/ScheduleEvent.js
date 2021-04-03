@@ -5,6 +5,7 @@ import EventsTable from './EventsTable/EventsTable';
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { withRouter, NavLink } from 'react-router-dom';
 
 const useStyles = (theme) => ({
     root: {
@@ -113,7 +114,7 @@ class ScheduleEvent extends Component {
                                 </form>
                             </Grid>
                             <Grid item xs={4} >
-                                <Button
+                                <Button component={NavLink} to={'/createEvent/'}
                                         variant="contained"
                                         color="secondary"
                                         className={classes.button}
@@ -133,4 +134,4 @@ class ScheduleEvent extends Component {
     
 }
 
-export default withStyles(useStyles)(ScheduleEvent);
+export default withRouter(withStyles(useStyles)(ScheduleEvent));

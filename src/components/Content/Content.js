@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 
 import ScheduleEvent from './ScheduleEvent/ScheduleEvent';
 import ViewEvent from './ViewEvent/ViewEvent';
+import CreateEvent from './CreateEvent/CreateEvent';
 
 const Content = (props) => {
     
@@ -11,7 +12,8 @@ const Content = (props) => {
         <Container>
             <Grid item container>
                 <Route path="/events" exact component={ScheduleEvent}/>
-                <Route path="/viewevent/:id" component={ViewEvent}/>
+                <Route path="/viewEvent/:id" exact component={ViewEvent}/>
+                <Route path="/createEvent/" exact component={CreateEvent}/>
             </Grid>
         </Container>
     )

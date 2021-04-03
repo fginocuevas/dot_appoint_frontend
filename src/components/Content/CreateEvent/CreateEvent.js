@@ -35,13 +35,11 @@ class ViewEvent extends Component {
     }
 
     handleChange (evt) {
-        console.log("handleChange: " + evt.target.name + " : " + evt.target.value);
         this.setState({ [evt.target.name]: evt.target.value });
     }
 
     submitForm = (evt) => {
         evt.preventDefault();
-        console.log("Building formData");
         const formData= {
             patientName: this.state.patientName,
             eventDate: this.state.eventDate,
@@ -50,10 +48,11 @@ class ViewEvent extends Component {
             assignedDoctorId: parseInt(this.state.assignedDoctorId),
             schedulerId: this.state.schedulerId,
         }
-        console.log(formData);
         axios.post(CREATE_NEW_EVENT_URL, formData).then(response => {
+            //TODO Handle toast or notification
             console.log(response);
         }).catch(err => {
+            //TODO Error Handling
             console.log(err.response);
         } )
     }

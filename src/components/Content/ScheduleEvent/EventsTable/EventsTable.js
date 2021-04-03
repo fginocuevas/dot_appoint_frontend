@@ -21,6 +21,7 @@ const useStyles = theme => ({
     },
   });
 
+  //TODO Get All Events
 const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByDateRange?startDate=2021-02-01&endDate=2021-04-03';
 
 class EventsTable extends Component {

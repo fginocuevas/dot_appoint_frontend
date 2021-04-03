@@ -53,7 +53,7 @@ const Navbar = (props) => {
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}>
-                    <MenuItem onClick={handleClose} component={NavLink} to="/event">Schedule Event</MenuItem>
+                    <MenuItem onClick={handleClose} component={NavLink} to="/events">Schedule Event</MenuItem>
                     <MenuItem onClick={handleClose} component={NavLink} to="/account"> Account</MenuItem>
                     <MenuItem onClick={handleClose} component={NavLink} to="/logout">Logout</MenuItem>
             </Menu>

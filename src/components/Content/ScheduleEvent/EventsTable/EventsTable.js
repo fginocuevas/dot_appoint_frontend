@@ -7,28 +7,45 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
+import { IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+
+import { withRouter, NavLink } from 'react-router-dom';
 
 const useStyles = theme => ({
     table: {
       minWidth: 650,
     },
   });
-  
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
+
+const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByDateRange?startDate=2021-02-01&endDate=2021-04-03';
 
 class EventsTable extends Component {
+
+    state = {
+        events : []
+    };
+
+    componentDidMount(){
+        axios.get(RETRIEVE_EVENT_BY_DATE_RANGE_URL, {data : {}})
+        .then(response => {
+            console.log(response);
+            this.setState({events : response.data});
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.searchData){
+            this.setState({events : nextProps.searchData});
+        }
+    }
+
     render(){
         const { classes } = this.props;
+        
         return(
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
@@ -43,16 +60,26 @@ class EventsTable extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow key={row.name}>
-                                <TableCell component="th" scope="row">{1}</TableCell>
+                        {this.state.events.map((event) => (
+                            <TableRow key={event.id} style={{ textDecoration: 'none' }} component={NavLink} to={'/viewEvent/' + event.id}>
+                                <TableCell component="th" scope="row">{event.id}</TableCell>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {event.patientName}
                                 </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
-                                <TableCell align="right">{row.protein}</TableCell>
+                                <TableCell align="right">{event.eventDate}</TableCell>
+                                <TableCell align="right">{event.startTime}</TableCell>
+                                <TableCell align="right">{event.endTime}</TableCell>
+                                <TableCell align="right">
+                                    <IconButton component={NavLink} to={'/acceptEvent/' + event.id}>
+                                        <ThumbUpIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton component={NavLink} to={'/editEvent/' + event.id}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton component={NavLink} to={'/deleteEvent/' + event.id}>
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -62,4 +89,4 @@ class EventsTable extends Component {
     }
 }
 
-export default withStyles(useStyles)(EventsTable);
+export default withRouter(withStyles(useStyles)(EventsTable));

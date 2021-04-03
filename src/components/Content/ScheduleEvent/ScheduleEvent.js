@@ -1,9 +1,12 @@
 import { Container, Grid, TextField, Box, Button, Icon } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import EventsTable from './EventsTable/EventsTable';
+import React, { Component } from 'react';
+import axios from 'axios';
+import moment from 'moment';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
     root: {
       width: '100%',
       '& > * + *': {
@@ -19,69 +22,115 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
     },
-  }));
+  });
 
-const ScheduleEvent = (props) => {
+  const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByDateRange';
 
-    const classes = useStyles();
+
+class ScheduleEvent extends Component {
+
+    constructor () {
+        super();
+        this.state = {
+            searchData: null,
+            startDateSelected: moment(new Date()).format("YYYY-MM-DD"),
+            endDateSelected: moment(new Date()).format("YYYY-MM-DD")
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange (evt) {
+        this.setState({ [evt.target.name]: evt.target.value });
+    }
+
+    searchByDateRangeHandler = () => {
+        if(this.state.startDateSelected && this.state.endDateSelected){
+
+            const formData = {
+                data : {},
+                params: {
+                    startDate: this.state.startDateSelected,
+                    endDate: this.state.endDateSelected
+                }
+            }
+
+            axios.get(RETRIEVE_EVENT_BY_DATE_RANGE_URL, formData)
+            .then(response => {
+                this.setState({searchData: response.data});
+            })
+        }
+
+    }
     
-    return(
-        <Container>
-            <Grid container>
-                <h3>Schedule Event</h3>
-            </Grid>
-            <Grid item container>
-                <div className={classes.root}>
-                    <Alert severity="success" color="info">
-                        This is a success alert — check it out!
-                    </Alert>
-                </div>
-            </Grid>
-            <Box mt={0.5}>
+    render(){
+        const { classes } = this.props;
+
+        return(
+            <Container>
                 <Grid container>
-                        <Grid item xs={8} >
-                            <form className={classes.container} noValidate>
-                                <TextField
-                                    id="date"
-                                    label="From"
-                                    type="date"
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                    shrink: true,
-                                    }}
-                                />
-                                <TextField
-                                    id="date"
-                                    label="To"
-                                    type="date"
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                    shrink: true,
-                                    }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.button}
-                                    endIcon={<Icon>search</Icon>}
-                                >Search</Button>
-                            </form>
-                        </Grid>
-                        <Grid item xs={4} >
-                            <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}
-                                    endIcon={<Icon>add</Icon>}
-                                >Set New Event</Button>
-                        </Grid>
+                    <h3>Schedule Event</h3>
                 </Grid>
-            </Box>
-            <Box mt={0.5}>
-                <EventsTable />
-            </Box>
-        </Container>
-    )
+                <Grid item container>
+                    <div className={classes.root}>
+                        <Alert severity="success" color="info">
+                            This is a success alert — check it out!
+                        </Alert>
+                    </div>
+                </Grid>
+                <Box mt={0.5}>
+                    <Grid container>
+                            <Grid item xs={8} >
+                                <form className={classes.container} noValidate>
+                                    <TextField
+                                        name="startDateSelected"
+                                        label="From"
+                                        type="date"
+                                        className={classes.textField}
+                                        value={this.state.startDateSelected}
+                                        onChange={this.handleChange}
+                                        InputLabelProps={{
+                                        shrink: true,
+                                        }}
+                                    />
+                                    <TextField
+                                        name="endDateSelected"
+                                        label="To"
+                                        type="date"
+                                        className={classes.textField}
+                                        value={this.state.endDateSelected}
+                                        onChange={this.handleChange}
+                                        InputLabelProps={{
+                                        shrink: true,
+                                        }}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}
+                                        endIcon={<Icon>search</Icon>}
+                                        onClick= {this.searchByDateRangeHandler}
+                                    >Search</Button>
+                                </form>
+                            </Grid>
+                            <Grid item xs={4} >
+                                <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        endIcon={<Icon>add</Icon>}
+                                    >Set New Event</Button>
+                            </Grid>
+                    </Grid>
+                </Box>
+                <Box mt={0.5}>
+                    <EventsTable 
+                        searchData = {this.state.searchData}/>
+                </Box>
+            </Container>
+        )
+
+    }
+    
 }
 
-export default ScheduleEvent;
+export default withStyles(useStyles)(ScheduleEvent);

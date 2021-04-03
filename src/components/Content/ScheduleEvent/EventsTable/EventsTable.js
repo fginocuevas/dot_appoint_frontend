@@ -11,9 +11,11 @@ import axios from 'axios';
 import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { withRouter, NavLink } from 'react-router-dom';
+
+import AcceptEventDialog from '../../AcceptEventDialog/AcceptEventDialog';
 
 const useStyles = theme => ({
     table: {
@@ -62,7 +64,7 @@ class EventsTable extends Component {
                     </TableHead>
                     <TableBody>
                         {this.state.events.map((event) => (
-                            <TableRow key={event.id} style={{ textDecoration: 'none' }} component={NavLink} to={'/viewEvent/' + event.id}>
+                            <TableRow key={event.id} style={{ textDecoration: 'none' }}>
                                 <TableCell component="th" scope="row">{event.id}</TableCell>
                                 <TableCell component="th" scope="row">
                                     {event.patientName}
@@ -71,8 +73,11 @@ class EventsTable extends Component {
                                 <TableCell align="right">{event.startTime}</TableCell>
                                 <TableCell align="right">{event.endTime}</TableCell>
                                 <TableCell align="right">
-                                    <IconButton component={NavLink} to={'/acceptEvent/' + event.id}>
-                                        <ThumbUpIcon fontSize="small" />
+                                    <IconButton component={NavLink} to={'/viewEvent/' + event.id}>
+                                        <SearchIcon fontSize="small" />
+                                    </IconButton>
+                                    <IconButton disabled={event.accepted}>
+                                        <AcceptEventDialog targetEvent={event}/>
                                     </IconButton>
                                     <IconButton component={NavLink} to={'/editEvent/' + event.id}>
                                         <EditIcon fontSize="small" />

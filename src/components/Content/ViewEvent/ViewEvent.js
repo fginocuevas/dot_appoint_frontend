@@ -14,8 +14,8 @@ const RETRIEVE_EVENT_URL= 'http://localhost:8080/event/retrieve/';
 
 class ViewEvent extends Component {
 
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
         this.state = {
             event: {},
             pageErrors: {}
@@ -30,12 +30,17 @@ class ViewEvent extends Component {
         })
     }
 
+    handleBackButton = () => {
+        this.props.history.push('/events');
+    }
+
     parseStatus = (statusId) => {
         return (statusId) ? "ACCEPTED" : "PENDING";
     }
 
     render(){
         const { classes } = this.props;
+        
         return(
             <Container>
                 <Grid container>
@@ -189,8 +194,8 @@ class ViewEvent extends Component {
                                     size="large"
                                     variant="contained"
                                     color="primary"
+                                    onClick={this.handleBackButton}
                                     className={classes.button}
-                                    onClick={this.props.history.goBack}
                                     endIcon={<Icon>back</Icon>}
                                 >Back</Button>
                             </Grid>

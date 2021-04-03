@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Grid, TextField, FormControl, InputLabel, Select, withStyles, Button, Icon } from '@material-ui/core';
 import axios from 'axios';
 import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
+import { withRouter } from 'react-router-dom'
 
 const useStyles = (theme) => ({
     button: {
@@ -12,7 +13,7 @@ const useStyles = (theme) => ({
 const RETRIEVE_ALL_DOCTORS_URL= 'http://localhost:8080/doctor/retrieveAll';
 const CREATE_NEW_EVENT_URL= 'http://localhost:8080/event/create';
 
-class ViewEvent extends Component {
+class CreateEvent extends Component {
 
     constructor () {
         super();
@@ -52,7 +53,7 @@ class ViewEvent extends Component {
         }
         axios.post(CREATE_NEW_EVENT_URL, formData).then(response => {
             //TODO Handle toast or notification
-            console.log(response);
+            this.props.history.push('/viewEvent/' + response.data.id)
         }).catch(err => {
             //TODO Error Handling
             console.log(err.response);
@@ -171,4 +172,4 @@ class ViewEvent extends Component {
     }
 }
 
-export default withStyles(useStyles)(ViewEvent);
+export default withRouter(withStyles(useStyles)(CreateEvent));

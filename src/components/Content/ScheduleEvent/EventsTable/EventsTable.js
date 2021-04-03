@@ -10,12 +10,12 @@ import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 
 import { withRouter, NavLink } from 'react-router-dom';
 
 import AcceptEventDialog from '../../AcceptEventDialog/AcceptEventDialog';
+import DeleteEventDialog from '../../DeleteEventDialog/DeleteEventDialog';
 
 const useStyles = theme => ({
     table: {
@@ -82,8 +82,8 @@ class EventsTable extends Component {
                                     <IconButton component={NavLink} to={'/editEvent/' + event.id}>
                                         <EditIcon fontSize="small" />
                                     </IconButton>
-                                    <IconButton component={NavLink} to={'/deleteEvent/' + event.id}>
-                                        <DeleteIcon fontSize="small" />
+                                    <IconButton>
+                                        <DeleteEventDialog targetEvent={event}/>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>

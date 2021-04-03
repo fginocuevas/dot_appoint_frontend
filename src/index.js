@@ -3,6 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+
+export const jwtToken = localStorage.getItem("authorization");
+
+axios.interceptors.request.use((request) => {
+    if (jwtToken) {
+        request.headers['Authorization'] = "Bearer " + jwtToken;
+        request.headers['Access-Control-Allow-Origin'] = "*";
+      }
+      console.log("interceptors");
+      console.log(request);
+      return request;
+    }, (error) => {
+      console.log("interceptors error");
+      return Promise.reject(error.message);
+});
 
 ReactDOM.render(
   <React.StrictMode>

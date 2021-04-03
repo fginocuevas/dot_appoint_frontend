@@ -30,9 +30,13 @@ const Navbar = (props) => {
         setAnchorEl(event.currentTarget);
       };
     
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    const handleLogout= () => {
+      localStorage.clear();
+    }
 
     return(
         <AppBar position="static">
@@ -55,7 +59,7 @@ const Navbar = (props) => {
                 onClose={handleClose}>
                     <MenuItem onClick={handleClose} component={NavLink} to="/events">Schedule Event</MenuItem>
                     <MenuItem onClick={handleClose} component={NavLink} to="/account"> Account</MenuItem>
-                    <MenuItem onClick={handleClose} component={NavLink} to="/logout">Logout</MenuItem>
+                    <MenuItem onClick={handleLogout} component={NavLink} to="/">Logout</MenuItem>
             </Menu>
             <Typography variant="h5" className={classes.title}>
                 .appoint

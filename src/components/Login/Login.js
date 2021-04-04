@@ -66,7 +66,7 @@ class Login extends Component {
         axios.get("http://localhost:8080/user/username/" + this.state.username).then(res => {
         //Place currentUser in cookies
             if (res.data) {
-                localStorage.setItem("appuser", JSON.stringify(res.data));
+                localStorage.setItem("appUser", JSON.stringify(res.data));
                 this.props.history.push("/events");
             } else {
                 this.setState({error: "An authentication failure has occurred. Please try again"})

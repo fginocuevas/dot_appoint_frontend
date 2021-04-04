@@ -26,6 +26,7 @@ class CreateEvent extends Component {
             schedulerId: 1,
             doctorList: [],
             pageError: null,
+            comments: null
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -57,6 +58,7 @@ class CreateEvent extends Component {
             endTime: this.state.endTime,
             assignedDoctorId: parseInt(this.state.assignedDoctorId),
             schedulerId: this.state.schedulerId,
+            comments: this.state.comments,
         }
         axios.post(CREATE_NEW_EVENT_URL, formData).then(response => {
             //TODO Handle toast or notification
@@ -163,6 +165,20 @@ class CreateEvent extends Component {
                                             ))}
                                     </Select>
                                 </FormControl>
+                            </Grid>
+                            <Grid item container>
+                                <TextField
+                                    onChange= {this.handleChange}
+                                    name="comments"
+                                    label="Comments"
+                                    placeholder="Comments"
+                                    fullWidth
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    variant="outlined"
+                                />
                             </Grid>
                             <Grid container>
                                 <Button fullWidth

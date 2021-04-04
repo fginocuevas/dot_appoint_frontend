@@ -64,7 +64,6 @@ class ViewEvent extends Component {
                                 name="patientName"
                                 value={this.state.event.patientName}
                                 label="Patient's Name"
-                                placeholder="Placeholder"
                                 fullWidth
                                 margin="normal"
                                 InputLabelProps={{
@@ -170,6 +169,20 @@ class ViewEvent extends Component {
                                 />
                             </Grid>
                         </Grid>
+                        <Grid item container>
+                                <TextField
+                                    name="comments"
+                                    value={this.state.event.comments}
+                                    label="Comments"
+                                    fullWidth
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    variant="outlined"
+                                    disabled
+                                />
+                            </Grid>
                         <Grid container spacing={3}>
                             <Grid item xs={6}>
                                 <TextField

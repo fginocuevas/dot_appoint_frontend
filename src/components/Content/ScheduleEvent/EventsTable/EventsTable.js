@@ -29,13 +29,16 @@ const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByD
 class EventsTable extends Component {
 
     state = {
-        events : []
+        events : [],
+        appUserId: 0,
+        roleTypeId: 0,
     };
 
     componentDidMount(){
+        this.handleAuthorization();
         axios.get(RETRIEVE_EVENT_BY_DATE_RANGE_URL, {data : {}})
         .then(response => {
-            console.log(response);
+            // console.log(response);
             this.setState({events : response.data});
         })
     }
@@ -46,9 +49,22 @@ class EventsTable extends Component {
         }
     }
 
+    handleAuthorization() {
+        if(localStorage.getItem('appUser')){
+            const appUser= JSON.parse(localStorage.getItem('appUser'));
+            this.setState({
+                appUserId : appUser.id,
+                roleTypeId : appUser.roleTypeId
+            });
+        }
+    }
+
+    isAppUserScheduler = () => {
+        return this.state.roleTypeId === 1;
+    }
+
     render(){
         const { classes } = this.props;
-        
         return(
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
@@ -76,12 +92,16 @@ class EventsTable extends Component {
                                     <IconButton component={NavLink} to={'/viewEvent/' + event.id}>
                                         <SearchIcon fontSize="small" />
                                     </IconButton>
-                                    <IconButton disabled={event.accepted}>
-                                        <AcceptEventDialog targetEvent={event}/>
-                                    </IconButton>
-                                    <IconButton component={NavLink} to={'/editEvent/' + event.id}>
-                                        <EditIcon fontSize="small" />
-                                    </IconButton>
+                                    {!this.isAppUserScheduler() && 
+                                        <IconButton disabled={event.accepted}>
+                                            <AcceptEventDialog targetEvent={event}/>
+                                        </IconButton>
+                                    }
+                                    {this.isAppUserScheduler() && 
+                                        <IconButton component={NavLink} to={'/editEvent/' + event.id}>
+                                            <EditIcon fontSize="small" />
+                                        </IconButton>
+                                    }
                                     <IconButton>
                                         <DeleteEventDialog targetEvent={event}/>
                                     </IconButton>

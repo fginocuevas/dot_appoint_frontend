@@ -25,6 +25,7 @@ const useStyles = theme => ({
 
   //TODO Get All Events
 const RETRIEVE_ALL_EVENTS_URL= 'http://localhost:8080/event/retrieveAll';
+const RETRIEVE_ALL_EVENTS_BY_DOCTOR_URL = 'http://localhost:8080/event/retrieveAllByDoctor/';
 
 class EventsTable extends Component {
 
@@ -41,6 +42,12 @@ class EventsTable extends Component {
 
             const appUser= JSON.parse(localStorage.getItem('appUser'));
             let retrieveUrl= RETRIEVE_ALL_EVENTS_URL;
+
+            if(appUser.roleTypeId === 2){
+                retrieveUrl= RETRIEVE_ALL_EVENTS_BY_DOCTOR_URL + appUser.id;
+            }
+
+            console.log(retrieveUrl);
 
             axios.get(retrieveUrl, {data : {}})
             .then(response => {

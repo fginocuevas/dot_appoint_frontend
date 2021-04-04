@@ -47,8 +47,6 @@ class EventsTable extends Component {
                 retrieveUrl= RETRIEVE_ALL_EVENTS_BY_DOCTOR_URL + appUser.id;
             }
 
-            console.log(retrieveUrl);
-
             axios.get(retrieveUrl, {data : {}})
             .then(response => {
             this.setState({events : response.data});
@@ -75,6 +73,10 @@ class EventsTable extends Component {
         }
     }
 
+    parseStatus = (statusId) => {
+        return (statusId) ? "ACCEPTED" : "PENDING";
+    }
+
     isAppUserScheduler = () => {
         return this.state.roleTypeId === 1;
     }
@@ -92,6 +94,7 @@ class EventsTable extends Component {
                             <TableCell align="right">Start Time</TableCell>
                             <TableCell align="right">End Time</TableCell>
                             <TableCell align="right">Actions</TableCell>
+                            <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -104,6 +107,7 @@ class EventsTable extends Component {
                                 <TableCell align="right">{event.eventDate}</TableCell>
                                 <TableCell align="right">{event.startTime}</TableCell>
                                 <TableCell align="right">{event.endTime}</TableCell>
+                                <TableCell align="right">{this.parseStatus(event.accepted)}</TableCell>
                                 <TableCell align="right">
                                     <IconButton component={NavLink} to={'/viewEvent/' + event.id}>
                                         <SearchIcon fontSize="small" />

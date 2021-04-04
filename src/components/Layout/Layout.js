@@ -9,6 +9,7 @@ import ScheduleEvent from '../Content/ScheduleEvent/ScheduleEvent';
 import ViewEvent from '../Content/ViewEvent/ViewEvent';
 import CreateEvent from '../Content/CreateEvent/CreateEvent';
 import EditEvent from '../Content/EditEvent/EditEvent';
+import ViewAccount from '../Content/ViewAccount/ViewAccount';
 
 const layout= (props) => (
     <Aux>
@@ -22,6 +23,7 @@ const layout= (props) => (
                 <Route path="/viewEvent/:id" exact component={ViewEvent}/>
                 <Route path="/editEvent/:id" exact component={EditEvent}/>
                 <Route path="/createEvent/" exact component={CreateEvent}/>
+                <Route path="/account/" exact component={ViewAccount}/>
             </Grid>
         </Grid>
     </Aux>

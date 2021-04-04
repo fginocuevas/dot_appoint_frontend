@@ -213,16 +213,16 @@ class ViewEvent extends Component {
                                     disabled
                                 />
                             </Grid>
-                            <Grid container>
-                                <Button fullWidth
-                                    size="large"
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleBackButton}
-                                    className={classes.button}
-                                    endIcon={<Icon>back</Icon>}
-                                >Back</Button>
-                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Button fullWidth
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                onClick={this.handleBackButton}
+                                className={classes.button}
+                                endIcon={<Icon>back</Icon>}
+                            >Back</Button>
                         </Grid>
                 </Grid>
             </Container>

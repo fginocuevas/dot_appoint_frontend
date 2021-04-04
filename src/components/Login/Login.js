@@ -83,7 +83,7 @@ class Login extends Component {
     const { classes } = this.props;
     return (
         <Container>
-            {this.state.error && 
+            {this.state.pageError && 
                 <SnackBarCustom 
                     errorMessage={this.state.pageError}
                     severity="error"/>}

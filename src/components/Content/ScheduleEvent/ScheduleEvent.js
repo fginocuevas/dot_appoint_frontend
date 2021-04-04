@@ -3,7 +3,6 @@ import { withStyles } from '@material-ui/core/styles';
 import EventsTable from './EventsTable/EventsTable';
 import React, { Component } from 'react';
 import axios from 'axios';
-import moment from 'moment';
 import { withRouter, NavLink } from 'react-router-dom';
 import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
 
@@ -46,6 +45,10 @@ class ScheduleEvent extends Component {
 
     resetError = () => {
         this.setState({ error : null});
+    }
+
+    parseStatus = (statusId) => {
+        return (statusId) ? "ACCEPTED" : "PENDING";
     }
 
     searchByDateRangeHandler = () => {

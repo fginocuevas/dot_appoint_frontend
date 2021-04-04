@@ -16,6 +16,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 
 import AcceptEventDialog from '../../AcceptEventDialog/AcceptEventDialog';
 import DeleteEventDialog from '../../DeleteEventDialog/DeleteEventDialog';
+import SnackBarCustom from '../../../../containers/SnackBarCustom/SnackBarCustom';
 
 const useStyles = theme => ({
     table: {
@@ -29,11 +30,37 @@ const RETRIEVE_ALL_EVENTS_BY_DOCTOR_URL = 'http://localhost:8080/event/retrieveA
 
 class EventsTable extends Component {
 
-    state = {
-        events : [],
-        appUserId: 0,
-        roleTypeId: 0,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            events : [],
+            appUserId: 0,
+            roleTypeId: 0,
+            pageError: null,
+            pageSuccess: null,
+        };
+        this.showSuccessMessage = this.showSuccessMessage.bind(this);
+        this.showErrorMessage= this.showErrorMessage.bind(this);
+        this.handleReload= this.handleReload.bind(this);
+    }
+
+    handleReload(proceed){
+        if(proceed){
+            window.location.reload();
+        }
+    }
+
+    showSuccessMessage(message){
+        this.setState({
+            pageSuccess: message
+        })
+    }
+
+    showErrorMessage(message){
+        this.setState({
+            pageError: message
+        })
+    }
 
     componentDidMount(){
         this.handleAuthorization();
@@ -48,9 +75,13 @@ class EventsTable extends Component {
             }
 
             axios.get(retrieveUrl, {data : {}})
-            .then(response => {
-            this.setState({events : response.data});
-        })
+                .then(response => {
+                    this.setState({events : response.data});
+                }).catch((error) => {
+                    if (error.response) {
+                        console.log("error", error.response.data.message);
+                    }
+                });
 
         } else {
             console.log("Error occurred")
@@ -85,6 +116,14 @@ class EventsTable extends Component {
         const { classes } = this.props;
         return(
             <TableContainer component={Paper}>
+                {this.state.pageSuccess && 
+                <SnackBarCustom 
+                    errorMessage={this.state.pageSuccess}
+                    severity="success"/>}
+                {this.state.pageError && 
+                <SnackBarCustom 
+                    errorMessage={this.state.pageError}
+                    severity="error"/>}
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -114,7 +153,12 @@ class EventsTable extends Component {
                                     </IconButton>
                                     {!this.isAppUserScheduler() && 
                                         <IconButton disabled={event.accepted}>
-                                            <AcceptEventDialog targetEvent={event}/>
+                                            <AcceptEventDialog 
+                                                targetEvent={event}
+                                                showSuccessMessage= {this.showSuccessMessage}
+                                                showErrorMessage= {this.showErrorMessage}
+                                                handleReload= {this.handleReload}
+                                            />
                                         </IconButton>
                                     }
                                     {this.isAppUserScheduler() && 
@@ -123,7 +167,12 @@ class EventsTable extends Component {
                                         </IconButton>
                                     }
                                     <IconButton>
-                                        <DeleteEventDialog targetEvent={event}/>
+                                        <DeleteEventDialog 
+                                            targetEvent={event}
+                                            showSuccessMessage= {this.showSuccessMessage}
+                                            showErrorMessage= {this.showErrorMessage}
+                                            handleReload= {this.handleReload}
+                                        />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>

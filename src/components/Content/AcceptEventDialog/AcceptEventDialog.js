@@ -15,12 +15,10 @@ const AcceptEventDialog = (props) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    console.log(props.targetEvent);
     setOpen(true);
   };
 
   const handleAccept= () => {
-    console.log(props.targetEvent);
     let formData = {
       eventId: props.targetEvent.id,
       doctorId: props.targetEvent.doctorId
@@ -28,9 +26,15 @@ const AcceptEventDialog = (props) => {
 
     axios.post(ACCEPT_EVENT_URL, formData)
         .then(response => { 
+          props.showSuccessMessage("Successfully accepted event for " + props.targetEvent.patientName);
+          props.handleReload(true);
           console.log("Accepting event success!");
-        }).catch(err => {
-          console.log("Error occurred in handleAccept");
+        }).catch((error) => {
+          if (error.response) {
+              console.log("Error occurred in handleAccept");
+              console.log(error.response.data);
+              props.showErrorMessage(error.response.data.message);
+          }
         });
 
     setOpen(false);

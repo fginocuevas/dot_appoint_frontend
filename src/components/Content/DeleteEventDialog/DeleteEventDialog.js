@@ -24,8 +24,12 @@ const DeleteEventDialog = (props) => {
     axios.get(DELETE_EVENT_URL + props.targetEvent.id)
         .then(response => { 
           console.log("Deleting event success!");
-        }).catch(err => {
-          console.log("Error occurred in handleDelete");
+          props.showSuccessMessage("Successfully deleted event for " + props.targetEvent.patientName);
+          props.handleReload(true);
+        }).catch(error => {
+          console.log("Error occurred in delete event");
+          console.log(error.response.data);
+          props.showErrorMessage(error.response.data.message);
         });
     setOpen(false);
   };

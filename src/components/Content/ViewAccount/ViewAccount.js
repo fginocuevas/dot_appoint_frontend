@@ -103,6 +103,10 @@ class ViewAccount extends Component {
         this.setState({ pageError : null});
     }
 
+    isAppUserScheduler = () => {
+        return this.state.userData.roleTypeId === 1;
+    }
+
     render(){
         const { classes } = this.props;
         
@@ -178,6 +182,7 @@ class ViewAccount extends Component {
                         </Grid>
                     </Grid>
                     <Grid item container>
+                    {  !this.isAppUserScheduler() ?
                         <FormControl variant="outlined" fullWidth>
                             <InputLabel shrink htmlFor="age-native-label-placeholder">
                                 Status
@@ -200,18 +205,34 @@ class ViewAccount extends Component {
                                     </option>
                                 ))}
                             </Select>
-                        </FormControl>
+                        </FormControl> 
+                        :
+                        <TextField
+                        name="status"
+                        label="Status"
+                        value={this.state.userData.statusDisplayText}
+                        fullWidth
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                        disabled
+                    />
+                    }
                     </Grid>
-                    <Grid container>
-                        <Button fullWidth
-                            size="large"
-                            variant="contained"
-                            color="secondary"
-                            onClick={this.handleUpdateStatus}
-                            className={classes.button}
-                            endIcon={<Icon>edit</Icon>}
-                        >Change Status</Button>
-                    </Grid>
+                    {  !this.isAppUserScheduler() &&
+                        <Grid container>
+                            <Button fullWidth
+                                size="large"
+                                variant="contained"
+                                color="secondary"
+                                onClick={this.handleUpdateStatus}
+                                className={classes.button}
+                                endIcon={<Icon>edit</Icon>}
+                            >Change Status</Button>
+                        </Grid>
+                    }
                     <Grid container>
                         <Button fullWidth
                             size="large"

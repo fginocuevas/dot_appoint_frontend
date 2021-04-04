@@ -42,6 +42,10 @@ class CreateEvent extends Component {
         this.setState({ [evt.target.name]: evt.target.value });
     }
 
+    handleBackButton = () => {
+        this.props.history.push('/events');
+    }
+
     resetError = () => {
         this.setState({ error : null});
     }
@@ -190,6 +194,16 @@ class CreateEvent extends Component {
                                     endIcon={<Icon>submit</Icon>}
                                 >Submit</Button>
                             </Grid>
+                            <Grid container>
+                            <Button fullWidth
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                onClick={this.handleBackButton}
+                                className={classes.button}
+                                endIcon={<Icon>back</Icon>}
+                            >Back</Button>
+                        </Grid>
                     </Grid>
                 </form>
             </Container>

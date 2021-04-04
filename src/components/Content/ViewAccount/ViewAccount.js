@@ -3,6 +3,7 @@ import { Container, Grid, TextField, withStyles, Button, Icon, FormControl, Inpu
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
+import SnackBarCustom from '../../../containers/SnackBarCustom/SnackBarCustom';
 
 const useStyles = (theme) => ({
     button: {
@@ -82,6 +83,7 @@ class ViewAccount extends Component {
 
         axios.put(UPDATE_DOCTOR_STATUS_URL, formData)
         .then(response => {
+            this.setState({pageSuccess : "Successfully updated status to " + response.data.statusDisplayText})
             this.props.history.push({
                 pathname: '/account/' 
             });
@@ -109,6 +111,10 @@ class ViewAccount extends Component {
                 <Grid container>
                     <h3>Account Information</h3>
                 </Grid>
+                {this.state.pageSuccess && 
+                <SnackBarCustom 
+                    errorMessage={this.state.pageSuccess}
+                    severity="success"/>}
                 <ErrorBanner pageErrors={this.state.pageError}/>
                 <Grid container>
                     <Grid container spacing={3}>

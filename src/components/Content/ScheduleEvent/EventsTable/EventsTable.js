@@ -24,7 +24,7 @@ const useStyles = theme => ({
   });
 
   //TODO Get All Events
-const RETRIEVE_EVENT_BY_DATE_RANGE_URL= 'http://localhost:8080/event/retrieveByDateRange?startDate=2021-02-01&endDate=2021-04-03';
+const RETRIEVE_ALL_EVENTS_URL= 'http://localhost:8080/event/retrieveAll';
 
 class EventsTable extends Component {
 
@@ -36,11 +36,20 @@ class EventsTable extends Component {
 
     componentDidMount(){
         this.handleAuthorization();
-        axios.get(RETRIEVE_EVENT_BY_DATE_RANGE_URL, {data : {}})
-        .then(response => {
-            // console.log(response);
+
+        if(localStorage.getItem('appUser')){
+
+            const appUser= JSON.parse(localStorage.getItem('appUser'));
+            let retrieveUrl= RETRIEVE_ALL_EVENTS_URL;
+
+            axios.get(retrieveUrl, {data : {}})
+            .then(response => {
             this.setState({events : response.data});
         })
+
+        } else {
+            console.log("Error occurred")
+        }
     }
 
     componentWillReceiveProps(nextProps) {

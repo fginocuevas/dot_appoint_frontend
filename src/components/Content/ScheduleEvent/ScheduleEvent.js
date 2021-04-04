@@ -33,8 +33,8 @@ class ScheduleEvent extends Component {
         super();
         this.state = {
             searchData: null,
-            startDateSelected: moment(new Date()).format("YYYY-MM-DD"),
-            endDateSelected: moment(new Date()).format("YYYY-MM-DD"),
+            startDateSelected: null,
+            endDateSelected: null,
             pageErrors: null,
         };
         this.handleChange = this.handleChange.bind(this);

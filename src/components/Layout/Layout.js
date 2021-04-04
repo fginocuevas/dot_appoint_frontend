@@ -8,6 +8,7 @@ import { Route } from 'react-router-dom';
 import ScheduleEvent from '../Content/ScheduleEvent/ScheduleEvent';
 import ViewEvent from '../Content/ViewEvent/ViewEvent';
 import CreateEvent from '../Content/CreateEvent/CreateEvent';
+import EditEvent from '../Content/EditEvent/EditEvent';
 
 const layout= (props) => (
     <Aux>
@@ -19,6 +20,7 @@ const layout= (props) => (
                 <Route path="/" exact component={Login} />
                 <Route path="/events" exact component={ScheduleEvent}/>
                 <Route path="/viewEvent/:id" exact component={ViewEvent}/>
+                <Route path="/editEvent/:id" exact component={EditEvent}/>
                 <Route path="/createEvent/" exact component={CreateEvent}/>
             </Grid>
         </Grid>

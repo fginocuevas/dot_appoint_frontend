@@ -18,13 +18,13 @@ export default function ErrorBanner(props) {
 
     return(
         <Grid item container>
-        {props.pageErrors && Object.keys(props.pageErrors).length !== 0 && 
-            <div className={classes.root}>
-                <Alert severity="error" color="error">
-                    {props.pageErrors.message}
-                </Alert>
-            </div>
-        }
+          {props.pageErrors && 
+              <div className={classes.root}>
+                  <Alert severity="error" color="error">
+                      {props.pageErrors}
+                  </Alert>
+              </div>
+          }
         </Grid>
     )
 }

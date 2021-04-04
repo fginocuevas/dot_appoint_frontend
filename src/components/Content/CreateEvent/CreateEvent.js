@@ -25,7 +25,7 @@ class CreateEvent extends Component {
             assignedDoctorId: 0,
             schedulerId: 1,
             doctorList: [],
-            pageErrors: {}
+            pageError: null,
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -41,8 +41,15 @@ class CreateEvent extends Component {
         this.setState({ [evt.target.name]: evt.target.value });
     }
 
+    resetError = () => {
+        this.setState({ error : null});
+    }
+
+
     submitForm = (evt) => {
         evt.preventDefault();
+        this.resetError();
+
         const formData= {
             patientName: this.state.patientName,
             eventDate: this.state.eventDate,
@@ -54,10 +61,12 @@ class CreateEvent extends Component {
         axios.post(CREATE_NEW_EVENT_URL, formData).then(response => {
             //TODO Handle toast or notification
             this.props.history.push('/viewEvent/' + response.data.id)
-        }).catch(err => {
-            //TODO Error Handling
-            console.log(err.response);
-        } )
+        }).catch((error) => {
+            if (error.response) {
+                console.log(error.response.data);
+                this.setState( {pageError : error.response.data.message} );
+            }
+        })
     }
     
     render(){
@@ -67,7 +76,7 @@ class CreateEvent extends Component {
                 <Grid container>
                     <h3>Create Event</h3>
                 </Grid>
-                <ErrorBanner pageErrors={this.state.pageErrors}/>
+                <ErrorBanner pageErrors={this.state.pageError}/>
                 <form onSubmit={this.submitForm}>
                     <Grid container>
                             <Grid item container>

@@ -18,15 +18,22 @@ class ViewEvent extends Component {
         super(props);
         this.state = {
             event: {},
-            pageErrors: {}
+            pageError: null,
         };
     }
 
     componentDidMount(){
+        this.resetError();
+
         axios.get(RETRIEVE_EVENT_URL + this.props.match.params.id, {data:{}})
         .then(response => {
             console.log(response.data);
             this.setState({event : response.data});
+        }).catch((error) => {
+            if (error.response) {
+                console.log(error.response.data);
+                this.setState( {pageError : error.response.data.message} );
+            }
         })
     }
 
@@ -38,6 +45,10 @@ class ViewEvent extends Component {
         return (statusId) ? "ACCEPTED" : "PENDING";
     }
 
+    resetError = () => {
+        this.setState({ error : null});
+    }
+
     render(){
         const { classes } = this.props;
         
@@ -46,7 +57,7 @@ class ViewEvent extends Component {
                 <Grid container>
                     <h3>View Event</h3>
                 </Grid>
-                <ErrorBanner pageErrors={this.state.pageErrors}/>
+                <ErrorBanner pageErrors={this.state.pageError}/>
                 <Grid container>
                         <Grid item container>
                             <TextField

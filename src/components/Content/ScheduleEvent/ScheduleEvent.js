@@ -35,7 +35,7 @@ class ScheduleEvent extends Component {
             searchData: null,
             startDateSelected: moment(new Date()).format("YYYY-MM-DD"),
             endDateSelected: moment(new Date()).format("YYYY-MM-DD"),
-            pageErrors: {}
+            pageErrors: null,
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -44,9 +44,13 @@ class ScheduleEvent extends Component {
         this.setState({ [evt.target.name]: evt.target.value });
     }
 
-    searchByDateRangeHandler = () => {
-        if(this.state.startDateSelected && this.state.endDateSelected){
+    resetError = () => {
+        this.setState({ error : null});
+    }
 
+    searchByDateRangeHandler = () => {
+        this.resetError();
+        if(this.state.startDateSelected && this.state.endDateSelected){
             const formData = {
                 data : {},
                 params: {
@@ -58,6 +62,11 @@ class ScheduleEvent extends Component {
             axios.get(RETRIEVE_EVENT_BY_DATE_RANGE_URL, formData)
             .then(response => {
                 this.setState({searchData: response.data});
+            }).catch((error) => {
+                if (error.response) {
+                    console.log(error.response.data.message);
+                    this.setState( {pageError : error.response.data.message} );
+                }
             })
         }
 
@@ -65,13 +74,12 @@ class ScheduleEvent extends Component {
     
     render(){
         const { classes } = this.props;
-
         return(
             <Container>
                 <Grid container>
                     <h3>Schedule Event</h3>
                 </Grid>
-                <ErrorBanner pageErrors={this.state.pageErrors}/>
+                <ErrorBanner pageErrors={this.state.pageError}/>
                 <Box mt={0.5}>
                     <Grid container>
                             <Grid item xs={8} >

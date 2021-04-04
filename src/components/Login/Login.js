@@ -22,7 +22,7 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
-      error: null,
+      pageError: null,
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -52,7 +52,7 @@ class Login extends Component {
     }).catch((error) => {
         if (error.response) {
             console.log(error.response.data.message);
-            this.setState( {error : error.response.data.message} );
+            this.setState( {pageError : error.response.data.message} );
         }
     });
   };
@@ -65,14 +65,17 @@ class Login extends Component {
         console.log("handleDashboard start");
         axios.get("http://localhost:8080/user/username/" + this.state.username).then(res => {
         //Place currentUser in cookies
-        if (res.data) {
-            localStorage.setItem("appuser", JSON.stringify(res.data));
-            this.props.history.push("/events");
-        } else {
-            this.setState({error: "An authentication failure has occurred. Please try again"})
-        }
-        }).catch((err) => {
-            localStorage.clear();
+            if (res.data) {
+                localStorage.setItem("appuser", JSON.stringify(res.data));
+                this.props.history.push("/events");
+            } else {
+                this.setState({error: "An authentication failure has occurred. Please try again"})
+            }
+        }).catch((error) => {
+            if (error.response) {
+                console.log(error.response.data);
+                this.setState( {pageError : error.response.data.message} );
+            }
         });
   }
 
@@ -82,7 +85,7 @@ class Login extends Component {
         <Container>
             {this.state.error && 
                 <SnackBarCustom 
-                    errorMessage={this.state.error}
+                    errorMessage={this.state.pageError}
                     severity="error"/>}
             <Grid container justify="center" wrap="wrap">
                 <form className="form-signin" onSubmit={this.handleFormSubmit}>

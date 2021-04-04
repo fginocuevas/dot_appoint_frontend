@@ -10,10 +10,9 @@ export const jwtToken = localStorage.getItem("authorization");
 axios.interceptors.request.use((request) => {
     if (jwtToken) {
         request.headers['Authorization'] = "Bearer " + jwtToken;
-        request.headers['Access-Control-Allow-Origin'] = "*";
       }
       console.log("interceptors");
-      console.log(request);
+      //console.log(request);
       return request;
     }, (error) => {
       console.log("interceptors error");

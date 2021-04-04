@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Paper, withStyles, Grid, TextField, Button } from '@material-ui/core';
 import { Face, Fingerprint } from '@material-ui/icons';
 import { withRouter } from 'react-router-dom';
+import SnackBarCustom from '../../containers/SnackBarCustom/SnackBarCustom';
 
 const styles = theme => ({
     margin: {
@@ -20,7 +21,8 @@ class Login extends Component {
 
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      error: null,
     };
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -32,6 +34,7 @@ class Login extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
+    this.resetError();
 
     const AUTHENTICATE_URL = "http://localhost:8080/authenticate";
 
@@ -44,25 +47,32 @@ class Login extends Component {
     };
 
     axios.post(AUTHENTICATE_URL, formData).then(res => {
-        console.log("Bearer " + res.data.jwttoken);
         localStorage.setItem("authorization", res.data.jwttoken);
         return this.handleDashboard();
-    }).catch(err => {
-        console.log("ERROR")
+    }).catch((error) => {
+        if (error.response) {
+            console.log(error.response.data.message);
+            this.setState( {error : error.response.data.message} );
+        }
     });
   };
 
+  resetError = () => {
+      this.setState({ error : null});
+  }
+
   handleDashboard() {
         console.log("handleDashboard start");
-        axios.get("http://localhost:8080/user/1").then(res => {
+        axios.get("http://localhost:8080/user/username/" + this.state.username).then(res => {
         //Place currentUser in cookies
         if (res.data) {
+            localStorage.setItem("appuser", JSON.stringify(res.data));
             this.props.history.push("/events");
         } else {
-            alert("Authentication failure");
+            this.setState({error: "An authentication failure has occurred. Please try again"})
         }
-        }).catch(err => {
-            console.log(err);
+        }).catch((err) => {
+            localStorage.clear();
         });
   }
 
@@ -70,6 +80,10 @@ class Login extends Component {
     const { classes } = this.props;
     return (
         <Container>
+            {this.state.error && 
+                <SnackBarCustom 
+                    errorMessage={this.state.error}
+                    severity="error"/>}
             <Grid container justify="center" wrap="wrap">
                 <form className="form-signin" onSubmit={this.handleFormSubmit}>
                     <Paper className={classes.padding}>

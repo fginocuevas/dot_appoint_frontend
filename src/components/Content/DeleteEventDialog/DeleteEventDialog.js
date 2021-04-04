@@ -27,7 +27,6 @@ const DeleteEventDialog = (props) => {
         }).catch(err => {
           console.log("Error occurred in handleDelete");
         });
-
     setOpen(false);
   };
 

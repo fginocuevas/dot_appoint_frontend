@@ -106,7 +106,6 @@ class ViewAccount extends Component {
         
         return(
             <Container>
-                {console.log(this.state)}
                 <Grid container>
                     <h3>Account Information</h3>
                 </Grid>

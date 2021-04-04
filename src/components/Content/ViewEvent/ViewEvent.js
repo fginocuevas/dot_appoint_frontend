@@ -3,6 +3,7 @@ import { Container, Grid, TextField, withStyles, Button, Icon } from '@material-
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import ErrorBanner from '../../../containers/ErrorBanner/ErrorBanner';
+import SnackBarCustom from '../../../containers/SnackBarCustom/SnackBarCustom';
 
 const useStyles = (theme) => ({
     button: {
@@ -18,12 +19,17 @@ class ViewEvent extends Component {
         super(props);
         this.state = {
             event: {},
+            pageSuccess : null,
             pageError: null,
         };
     }
 
     componentDidMount(){
         this.resetError();
+
+        if(this.props.location.state){
+            this.setState({pageSuccess : this.props.location.state.showSuccessMessage});
+        }
 
         axios.get(RETRIEVE_EVENT_URL + this.props.match.params.id, {data:{}})
         .then(response => {
@@ -57,6 +63,10 @@ class ViewEvent extends Component {
                 <Grid container>
                     <h3>View Event</h3>
                 </Grid>
+                {this.state.pageSuccess && 
+                <SnackBarCustom 
+                    errorMessage={this.state.pageSuccess}
+                    severity="success"/>}
                 <ErrorBanner pageErrors={this.state.pageError}/>
                 <Grid container>
                         <Grid item container>

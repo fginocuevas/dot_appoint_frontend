@@ -43,7 +43,9 @@ class CreateEvent extends Component {
     }
 
     handleBackButton = () => {
-        this.props.history.push('/events');
+        this.props.history.push({
+            pathname : '/events',
+        });
     }
 
     resetError = () => {
@@ -66,7 +68,13 @@ class CreateEvent extends Component {
         }
         axios.post(CREATE_NEW_EVENT_URL, formData).then(response => {
             //TODO Handle toast or notification
-            this.props.history.push('/viewEvent/' + response.data.id)
+            this.props.history.push({
+                pathname: '/viewEvent/' + response.data.id,
+                state: { 
+                    showSuccessMessage: 'Successfully created event for ' + this.state.patientName
+                }
+            })
+            
         }).catch((error) => {
             if (error.response) {
                 console.log(error.response.data);
